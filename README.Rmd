@@ -1,0 +1,63 @@
+---
+output: github_document
+---
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.path = "man/figures/README-",
+  out.width = "100%"
+)
+```
+
+# bootgcompr
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+The `bootgcompr` package is a group of functions used in combination with the `gtsummary` package for calculating non-parametric bootstrapped statistics using the `boot` package. `bootgcompr` allows for calculating the following in direct combination with `gtsummary`:
+
+- Mean and median summary statistics through `tbl_custom_summary()` 
+- Mean difference (MD) by bootstrapped linear regression (both univariate and multivariate) directly in `tbl_summary()`
+- Risk Ratio / Relative Risk (RR) by bootstrapped logistic regression directly in tbl_summary() using the `add_stat()` function.
+- Absolute Risk Ratio / Absolute Risk Reduction (ARR/ARD) using G-computation directly in tbl_summary() using the `add_stat()` function.
+- Associated 95% confidence intervals (95%CI) for all of the above mentioned statistics and analyses
+
+## Installation
+
+You can install the development version of bootgcompr from [GitHub](https://github.com/) with:
+
+``` r
+# install.packages("pak")
+pak::pak("mdcodedoctor/bootgcompr")
+```
+
+## Example of summary statistics
+
+If necessary to calculate summary statistics, while ensuring that the outputted means (using the `mean_boot()` function) or medians (using the `median_boot()` function) are bootstrapped with their 95%CI the functions can be used with `tbl_custom_summary()` through the `stat_fns =` argument.
+
+The function is called and specifies the number of applied resamples through the `R =` argument. If the number of resamples are not specified it uses the default number of 10,000 resamples.
+
+```{r tbl_summary() example}
+# load libraries
+library(bootgcompr)
+library(gtsummary)
+
+# create tbl_custom_summary table with bootstrapped summary statistics
+# set the `R = ` value to the number of wanted resamples. In this example we use 1000 resamples.
+trial |> 
+  tbl_custom_summary(
+    include = c(ttdeath, marker),
+    by = trt,
+    statistic = ~ "{mean} ({conf.low}, {conf.high})",
+    stat_fns = everything() ~ mean_boot(),
+    missing = "no",
+    type = everything() ~ "continuous"
+    ) |> 
+    add_overall()
+```
+
+
