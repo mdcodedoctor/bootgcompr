@@ -1,16 +1,17 @@
 Package: bootgcompr
-Title: What the Package Does (One Line, Title Case)
+Title: Bootstrap and G-computation functions in R
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
+    person("Lasse Paludan", "Bentsen", , "lasse.paludan.bentsen@rsyd.dk", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6809-3141"))
+Description: Functions for bootstrapping and G-computation for easy useage with the `gtsummary` package.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Imports: 
     boot,
-    gtsummary,
     tibble
+Suggests:
+    gtsummary
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
