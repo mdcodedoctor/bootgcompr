@@ -20,8 +20,12 @@ knitr::opts_chunk$set(
 
 The `bootgcompr` package is a group of functions used in combination with the `gtsummary` package for calculating non-parametric bootstrapped statistics using the `boot` package. `bootgcompr` allows for calculating the following in direct combination with `gtsummary`:
 
-- Mean and median summary statistics through `tbl_custom_summary()` 
-- Mean difference (MD) by bootstrapped linear regression (both univariate and multivariate) directly in `tbl_summary()`
+**Currently implemented:**
+- Mean summary statistics through `tbl_custom_summary()` 
+
+**Under development:**
+- Median summary statistics through `tbl_custom_summary()` 
+- Mean difference (MD) by bootstrapped linear regression (both univariate and multivariate) directly in `tbl_summary()` 
 - Risk Ratio / Relative Risk (RR) by bootstrapped logistic regression directly in tbl_summary() using the `add_stat()` function.
 - Absolute Risk Ratio / Absolute Risk Reduction (ARR/ARD) using G-computation directly in tbl_summary() using the `add_stat()` function.
 - Associated 95% confidence intervals (95%CI) for all of the above mentioned statistics and analyses
