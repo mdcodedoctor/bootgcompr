@@ -57,7 +57,7 @@ trial |>
     include = c(ttdeath, marker),
     by = trt,
     statistic = ~ "{mean} ({conf.low}, {conf.high})",
-    stat_fns = everything() ~ mean_boot(),
+    stat_fns = everything() ~ mean_boot(R = 1000),
     missing = "no",
     type = everything() ~ "continuous"
     ) |> 

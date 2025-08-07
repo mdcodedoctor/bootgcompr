@@ -2,19 +2,22 @@
 % Please edit documentation in R/mean_boot.R
 \name{mean_boot}
 \alias{mean_boot}
-\title{Bootstrapped mean (95\%CI) for tbl_custom_summary() in \code{gtsummary} for summary statistics.}
+\title{Descriptive summary bootstrapped mean (95\%CI) for \code{tbl_custom_summary()} from the \code{gtsummary} package}
 \usage{
-mean_boot(R = 10000)
+mean_boot(R = 1000)
 }
 \arguments{
-\item{R}{number of resamples (if not defined, the custom 10,000 resamples are used)}
+\item{R}{number of resamples (if not defined, the custom 1000 resamples are used)}
 }
 \description{
-Function used in conjunction with \code{gtsummary} \code{tbl_custom_summary()}. Set \code{stat_fns = var ~ mean_boot(R = )} and define number of resamples in the R call (E.g. R = 1000). Standard resamples are set to 10,000. Remember to define the \verb{statistic =} argument as \code{{mean} ({conf.low}, {conf.high})} in the \code{tbl_custom_summary()}.
+Function used in conjunction with \code{gtsummary} \code{tbl_custom_summary()}. Set \code{stat_fns = var ~ mean_boot(R = )} and define number of resamples in the R call (E.g. \code{R = 10000}). Remember to define the \verb{statistic =} argument as \code{{mean} ({conf.low}, {conf.high})} inside \code{tbl_custom_summary()}.
 }
 \examples{
+# load librarires
 library(gtsummary)
 library(bootgcompr)
+
+# build `tbl_custom_summary()` with the `mean_boot` function
 trial |>
 tbl_custom_summary(
  include = c(ttdeath, marker),
