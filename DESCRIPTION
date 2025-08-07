@@ -14,9 +14,11 @@ Imports:
     cardx,
     data.table,
     dplyr,
+    gt,
     gtsummary,
     rlang,
     stats,
-    tibble
+    tibble,
+    webshot2
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues

@@ -6,6 +6,11 @@
 \usage{
 gcomp_boot(adj.vars = NULL, R = 1000)
 }
+\arguments{
+\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}.}
+
+\item{R}{number of bootstrap resamples}
+}
 \description{
 Bootstrapping absolute risk differences using G-computation with covariate adjustment
 }

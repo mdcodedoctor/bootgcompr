@@ -6,6 +6,19 @@
 \usage{
 gcomp_boot_func(data, variable, by, adj.vars = NULL, R = 1000, ...)
 }
+\arguments{
+\item{data}{A dataframe passed from \code{gcomp_boot()} and \code{tbl_summary()}}
+
+\item{variable}{Inputted variable from the \code{tbl_summary(include = c())} argument. Variables are best handled as integers of 0 or 1, where 1 depicts that the outcome happened and 0 depicts that the outcome didn't happen.}
+
+\item{by}{Passed stratification/grouping variable from \code{tbl_summary(by = )} argument. Should accept both integers (0 vs. 1) or factors with at least 2 levels.}
+
+\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}}
+
+\item{R}{number of bootstrap resamples}
+
+\item{...}{Placeholder accepting further inputs from \code{tbl_summary()}}
+}
 \description{
-A short description...
+Main inside function when using \code{gcomp_boot()}. This function use the inputted setup data from the tbl_summary() with \code{add_stat()} inputted \code{gcomp_boot()} functions. Calculates the absolute risk difference (reduction / increase) using bootstrapped G-computation with predictions by logistic regression. Standard settings are using \code{glm()} formula with \code{binomial()} distribution. Also outputs the associated bootstrapped 95\%CI.
 }

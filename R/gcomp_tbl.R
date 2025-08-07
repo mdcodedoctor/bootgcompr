@@ -2,6 +2,12 @@
 #'
 #' @description
 #' Function used in conjunction with `gtsummary` `tbl_summary()` and `bootgcompr` `gcomp_boot` function. Standard output when using `gcomp_boot` is not adjusted to the usual `tbl_summary()` output as a custom function is called. This wrapper function cleans up the outputted table and formats it as expected other types of `tbl_summary()` outputs, e.g. when using functions like `add_difference()`.
+#'
+#' @param tbl_summary_obt The used table summary object (e.g. `tbl_summary()`)
+#' @param pattern The pattern in which the calculated output is formatted
+#' @param estimate_header Header name for the calculated estimate.
+#' @param p_value_header Header name for the calculated p.value
+#'
 #' @import gtsummary
 #' @import cardx
 #' @import broom

@@ -11,6 +11,10 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+
+library(gt)
+library(webshot2)
+library(knitr)
 ```
 
 # bootgcompr
@@ -45,14 +49,13 @@ If necessary to calculate summary statistics, while ensuring that the outputted 
 
 The function is called and specifies the number of applied resamples through the `R =` argument. If the number of resamples are not specified it uses the default number of 10,000 resamples.
 
-```{r tbl_summary() example}
+```{r tbl_summary example, include = TRUE}
 # load libraries
 library(bootgcompr)
 library(gtsummary)
 
-# create tbl_custom_summary table with bootstrapped summary statistics
-# set the `R = ` value to the number of wanted resamples. In this example we use 1000 resamples.
-trial |> 
+# create table for bootstrapped mean summary statistics
+table_sum <- trial |> 
   tbl_custom_summary(
     include = c(ttdeath, marker),
     by = trt,
@@ -63,6 +66,18 @@ trial |>
     ) |> 
     add_overall()
 ```
+
+
+```{r tbl_sum_print_simple, include = FALSE}
+gt::gtsave(as_gt(table_sum), file = "man/figures/README-table_sum.png")
+```
+
+```{r out.width = "25%", echo = FALSE}
+knitr::include_graphics("man/figures/README-table_sum.png")
+```
+
+
+## Acknowledgements
 
 A huge kudos to the developers of `gtsummary`. Without their substantial work, this package would not have existed. 
 
