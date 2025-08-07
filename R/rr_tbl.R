@@ -2,6 +2,7 @@
 #'
 #' @description
 #' Function used in conjunction with `gtsummary` `tbl_summary()` and `bootgcompr` `rr_boot` function. Standard output when using `rr_boot` is not adjusted to the usual `tbl_summary()` output as a custom function is called. This wrapper function cleans up the outputted table and formats it as expected other types of `tbl_summary()` outputs, e.g. when using functions like `add_difference()`.
+#' @import gtsummary
 #' @export
 #' @examples
 #' # load librarires

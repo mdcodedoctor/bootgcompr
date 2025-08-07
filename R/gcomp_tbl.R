@@ -2,6 +2,9 @@
 #'
 #' @description
 #' Function used in conjunction with `gtsummary` `tbl_summary()` and `bootgcompr` `gcomp_boot` function. Standard output when using `gcomp_boot` is not adjusted to the usual `tbl_summary()` output as a custom function is called. This wrapper function cleans up the outputted table and formats it as expected other types of `tbl_summary()` outputs, e.g. when using functions like `add_difference()`.
+#' @import gtsummary
+#' @import cardx
+#' @import broom
 #' @export
 #' @examples
 #' # load librarires
@@ -27,9 +30,9 @@
 
 # Easy wrapper function for modify_column_merge and modify_header
 gcomp_tbl <- function(tbl_summary_obj,
-                          pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
-                          estimate_header = "**ARDifference** (95%CI)",
-                          p_value_header = "**P-value**") {
+                      pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
+                      estimate_header = "**ARDifference** (95%CI)",
+                      p_value_header = "**P-value**") {
   tbl_summary_obj |>
     gtsummary::modify_column_hide(columns = c("std.error", "method")) |>
     gtsummary::modify_column_merge(pattern = pattern) |>

@@ -1,3 +1,5 @@
+#' Bootstrapping relative risk/risk ratio using logistic regression and non-parametric bootstrapping with covariate adjustment
+#'
 #' @export
 
 # wrapper function for using with fns = argument in add_stat()

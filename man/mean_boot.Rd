@@ -2,7 +2,7 @@
 % Please edit documentation in R/mean_boot.R
 \name{mean_boot}
 \alias{mean_boot}
-\title{Descriptive summary bootstrapped mean (95\%CI) for \code{tbl_custom_summary()} from the \code{gtsummary} package}
+\title{Descriptive summary bootstrapped mean (95\%CI)}
 \usage{
 mean_boot(R = 1000)
 }

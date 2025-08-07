@@ -1,4 +1,4 @@
-#' Descriptive summary bootstrapped mean (95%CI) for `tbl_custom_summary()` from the `gtsummary` package
+#' Descriptive summary bootstrapped mean (95%CI)
 #'
 #' @param R number of resamples (if not defined, the custom 1000 resamples are used)
 #' @description
@@ -26,6 +26,6 @@
 # wrapper function for using with `fns =` argument in `tbl_summary()`
 mean_boot <- function(R = 1000) {
   function(data, variable, ...) {
-    mean_boot_func(data, variable, R = R, ...)
+    bootgcompr::mean_boot_func(data, variable, R = R, ...)
   }
 }

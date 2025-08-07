@@ -1,3 +1,16 @@
+#' Relative risk / Risk ratio estimation using non-parametric bootstrapped logistic regression with covariate adjustment
+#'
+#' @description
+#' A short description...
+#'
+#' @import dplyr
+#' @importFrom stats as.formula
+#' @importFrom stats binomial
+#' @importFrom stats glm
+#' @importFrom stats predict
+#' @importFrom stats quantile
+#' @importFrom stats sd
+#'
 #' @export
 
 rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
@@ -12,10 +25,10 @@ rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
 
   # Predicted risks per group
   risks <- data %>%
-    mutate(pred = predict(model, type = "response")) %>%
-    group_by(.data[[by]]) %>%
-    summarise(risk = mean(pred), .groups = "drop") %>%
-    pull(risk)
+    dplyr::mutate(pred = predict(model, type = "response")) %>%
+    dplyr::group_by(.data[[by]]) %>%
+    dplyr::summarise(risk = mean(pred), .groups = "drop") %>%
+    dplyr::pull(risk)
 
   rr_point <- risks[1] / risks[2]
 
@@ -25,10 +38,10 @@ rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
     d_boot <- data[idx, ]
     m_boot <- glm(formula, data = d_boot, family = binomial)
     risks_boot <- d_boot %>%
-      mutate(pred = predict(m_boot, newdata = d_boot, type = "response")) %>%
-      group_by(.data[[by]]) %>%
-      summarise(risk = mean(pred), .groups = "drop") %>%
-      pull(risk)
+      dplyr::mutate(pred = predict(m_boot, newdata = d_boot, type = "response")) %>%
+      dplyr::group_by(.data[[by]]) %>%
+      dplyr::summarise(risk = mean(pred), .groups = "drop") %>%
+      dplyr::pull(risk)
     log(risks_boot[1] / risks_boot[2])
   })
 
