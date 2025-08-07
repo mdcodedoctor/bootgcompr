@@ -64,4 +64,11 @@ trial |>
     add_overall()
 ```
 
+A huge kudos to the developers of `gtsummary`. Without their substantial work, this package would not have existed. 
 
+## References
+Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible summary tables with the gtsummary package. The R Journal 2021;13:570–80. https://doi.org/10.32614/RJ-2021-053.
+
+Angelo Canty, B. D. Ripley (2024). boot: Bootstrap R (S-Plus) Functions. R package version 1.3-31.
+
+A. C. Davison, D. V. Hinkley (1997). Bootstrap Methods and Their Applications. Cambridge University Press, Cambridge. ISBN 0-521-57391-2, doi:10.1017/CBO9780511802843.
