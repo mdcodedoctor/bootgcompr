@@ -71,7 +71,7 @@ functions can be used with `tbl_custom_summary()` through the
 
 The function is called and specifies the number of applied resamples
 through the `R =` argument. If the number of resamples are not specified
-it uses the default number of 10,000 resamples.
+it uses the default number of 1000 resamples.
 
 ```{r tbl_summary example, include = TRUE}
 # load libraries
@@ -89,7 +89,7 @@ trial |>
     type = everything() ~ "continuous"
     ) |> 
     add_overall() |> 
-    as_gt() # note: as_gt() is called due to rendering issues in this document. This call is not necessary when using this                package.
+    as_gt() # note: `as_gt()` is called due to rendering issues in this document. This call is not necessary when using this                package.
 ```
 
 ## Acknowledgements
