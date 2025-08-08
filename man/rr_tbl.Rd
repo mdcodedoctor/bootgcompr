@@ -6,7 +6,7 @@
 \usage{
 rr_tbl(
   tbl_summary_obj,
-  pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
+  pattern = "{estimate} ({conf.low}, {conf.high})",
   estimate_header = "**RR** (95\%CI)",
   p_value_header = "**P-value**"
 )
