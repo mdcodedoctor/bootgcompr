@@ -1,3 +1,17 @@
+#' Underlying function for the `mean_boot()` function.
+#'
+#' @param data The inputted dataframe called from `data =` argument in `tbl_summary()`
+#' @param variable The inputted variable from `include = c()` argument in `tbl_summary()`
+#' @param R number of resamples (if not defined, the function calls 1000 resamples)
+#' @param ... Placeholder accepting further inputs from `tbl_summary()`
+#'
+#' @description
+#' Function used in conjunction with `gtsummary` `tbl_custom_summary()`. Set `stat_fns = var ~ mean_boot(R = )` and define number of resamples in the R call (E.g. `R = 10000`). Remember to define the `statistic =` argument as `{mean} ({conf.low}, {conf.high})` inside `tbl_custom_summary()`.
+#'
+#' @import boot
+#' @import tidyr
+#' @importFrom tibble as_tibble
+#'
 #' @export
 
 # function calculating mean boot of summary statistics (both groups and overall() values)

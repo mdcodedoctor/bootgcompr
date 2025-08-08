@@ -11,6 +11,7 @@
 #' @param ... Placeholder accepting further inputs from `tbl_summary()`
 #'
 #' @import dplyr
+#' @import tidyr
 #' @importFrom stats as.formula
 #' @importFrom stats binomial
 #' @importFrom stats glm

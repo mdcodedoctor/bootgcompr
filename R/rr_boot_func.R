@@ -3,7 +3,15 @@
 #' @description
 #' A short description...
 #'
+#' @param data A dataframe passed from `rr_boot()` and `tbl_summary()`
+#' @param variable Inputted variable from the `tbl_summary(include = c())` argument. Variables are best handled as integers of 0 or 1, where 1 depicts that the outcome happened and 0 depicts that the outcome didn't happen.
+#' @param by Passed stratification/grouping variable from `tbl_summary(by = )` argument. Should accept both integers (0 vs. 1) or factors with at least 2 levels.
+#' @param adj.vars Covariates used for adjusting the estimates. Uses the same setup as `gtsummary` `add_difference()` with `adj.vars = c("var")`
+#' @param R Number of resamples (Standard is 1000)
+#' @param ... Placeholder accepting further inputs from `tbl_summary()`
+#'
 #' @import dplyr
+#' @import tidyr
 #' @importFrom stats as.formula
 #' @importFrom stats binomial
 #' @importFrom stats glm

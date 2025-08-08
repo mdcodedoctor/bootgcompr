@@ -11,6 +11,15 @@ rr_tbl(
   p_value_header = "**P-value**"
 )
 }
+\arguments{
+\item{tbl_summary_obj}{The used table summary object (e.g. \code{tbl_summary()})}
+
+\item{pattern}{The pattern in which the calculated output is formatted}
+
+\item{estimate_header}{Header name for the calculated estimate.}
+
+\item{p_value_header}{Header name for the calculated p.value}
+}
 \description{
 Function used in conjunction with \code{gtsummary} \code{tbl_summary()} and \code{bootgcompr} \code{rr_boot} function. Standard output when using \code{rr_boot} is not adjusted to the usual \code{tbl_summary()} output as a custom function is called. This wrapper function cleans up the outputted table and formats it as expected other types of \code{tbl_summary()} outputs, e.g. when using functions like \code{add_difference()}.
 }

@@ -2,6 +2,8 @@
 #' @param R number of bootstrap resamples
 #' @param adj.vars Covariates used for adjusting the estimates. Uses the same setup as `gtsummary` `add_difference()` with `adj.vars = c("var")`.
 #'
+#' @import tidyr
+#'
 #' @export
 
 # Wrapper function for gcomp_boot_func
