@@ -34,14 +34,16 @@
 
 # Easy wrapper function for modify_column_merge and modify_header
 rr_tbl <- function(tbl_summary_obj,
-                      pattern = "{estimate} ({conf.low}, {conf.high})",
-                      estimate_header = "**RR** (95%CI)",
-                      p_value_header = "**P-value**") {
+                    pattern = "{estimate} ({conf.low}, {conf.high})",
+                    estimate_header = "RR (95%CI)",
+                    p_value_header = "P-value") {
   tbl_summary_obj |>
     gtsummary::modify_column_hide(columns = c("method")) |>
     gtsummary::modify_column_merge(pattern = pattern) |>
     gtsummary::modify_header(estimate = estimate_header, p.value = p_value_header) |>
     gtsummary::modify_footnote_header(
       "Relative Risk estimated by non-parametric bootstrapped logistic regression",
-      columns = c(p.value))
+      columns = c(p.value)
+    )
 }
+
