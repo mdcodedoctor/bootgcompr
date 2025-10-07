@@ -22,3 +22,6 @@ Imports:
     utils
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
