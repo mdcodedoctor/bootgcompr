@@ -2,22 +2,16 @@
 % Please edit documentation in R/try_fit_model.R
 \name{try_fit_model}
 \alias{try_fit_model}
-\title{G-computation using bootstrapping with covariate adjustment}
+\title{Helper function for the \code{gcomp_boot()} function.}
 \usage{
 try_fit_model(formula, data, method = "glm")
 }
 \arguments{
-\item{data}{A dataframe passed from \code{gcomp_boot()} and \code{tbl_summary()}}
+\item{formula}{formula passed from \code{gcomp_boot()} through \code{tbl_summary()} or \code{tbl_custom_summary()}}
 
-\item{variable}{Inputted variable from the \code{tbl_summary(include = c())} argument. Variables are best handled as integers of 0 or 1, where 1 depicts that the outcome happened and 0 depicts that the outcome didn't happen.}
+\item{data}{data passed from \code{gcomp_boot()} through \code{tbl_summary()} or \code{tbl_custom_summary()}}
 
-\item{by}{Passed stratification/grouping variable from \code{tbl_summary(by = )} argument. Should accept both integers (0 vs. 1) or factors with at least 2 levels.}
-
-\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}}
-
-\item{R}{number of bootstrap resamples}
-
-\item{...}{Placeholder accepting further inputs from \code{tbl_summary()}}
+\item{method}{set by \code{gcomp_boot()} function for either "glm", "logistf" or "poisson"}
 }
 \description{
 Function used through the \code{gcomp_boot()} function to evaluate whether the model can be fitted correctly.
