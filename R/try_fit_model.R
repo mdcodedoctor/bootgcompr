@@ -1,6 +1,7 @@
 #' G-computation using bootstrapping with covariate adjustment
 #'
 #' @description
+#' Function used through the `gcomp_boot()` function to evaluate whether the model can be fitted correctly.
 #'
 #' @param data A dataframe passed from `gcomp_boot()` and `tbl_summary()`
 #' @param variable Inputted variable from the `tbl_summary(include = c())` argument. Variables are best handled as integers of 0 or 1, where 1 depicts that the outcome happened and 0 depicts that the outcome didn't happen.
