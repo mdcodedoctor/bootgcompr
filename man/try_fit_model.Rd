@@ -20,5 +20,5 @@ try_fit_model(formula, data, method = "glm")
 \item{...}{Placeholder accepting further inputs from \code{tbl_summary()}}
 }
 \description{
-G-computation using bootstrapping with covariate adjustment
+Function used through the \code{gcomp_boot()} function to evaluate whether the model can be fitted correctly.
 }
