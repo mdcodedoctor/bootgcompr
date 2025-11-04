@@ -8,8 +8,8 @@
 #' @param estimate_header Header name for the calculated estimate.
 #' @param p_value_header Header name for the calculated p.value
 #'
-#' @import gtsummary
-#' @import tidyr
+#' @importFrom gtsummary modify_column_hide modify_column_merge modify_header modify_footnote_header
+#'
 #' @export
 #' @examples
 #' # load librarires

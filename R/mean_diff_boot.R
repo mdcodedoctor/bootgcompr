@@ -3,8 +3,6 @@
 #' @param R number of bootstrap resamples
 #' @param adj.vars Covariates used for adjusting the estimates. Uses the same setup as `gtsummary` `add_difference()` with `adj.vars = c("var")`
 #'
-#' @import tidyr
-#'
 #' @export
 
 mean_diff_boot <- function(adj.vars = NULL, R = 1000, ci_type = "bca") {

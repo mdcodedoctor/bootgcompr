@@ -8,9 +8,9 @@
 #' @description
 #' Function used in conjunction with `gtsummary` `tbl_custom_summary()`. Set `stat_fns = var ~ mean_boot(R = )` and define number of resamples in the R call (E.g. `R = 10000`). Remember to define the `statistic =` argument as `{mean} ({conf.low}, {conf.high})` inside `tbl_custom_summary()`.
 #'
-#' @import boot
-#' @import tidyr
-#' @importFrom tibble as_tibble
+#' @importFrom tibble as_tibble tibble
+#' @importFrom boot boot boot.ci
+#'
 #'
 #' @export
 

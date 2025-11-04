@@ -10,17 +10,10 @@
 #' @param R Number of resamples (Standard is 1000)
 #' @param ... Placeholder accepting further inputs from `tbl_summary()`
 #'
-#' @import dplyr
-#' @import tidyr
-#' @import sandwich
-#' @import lmtest
-#' @import logistf
-#' @importFrom stats as.formula
-#' @importFrom stats binomial
-#' @importFrom stats glm
-#' @importFrom stats predict
-#' @importFrom stats quantile
-#' @importFrom stats sd
+#' @importFrom stats glm binomial poisson predict quantile coef
+#' @importFrom dplyr mutate group_by summarise pull
+#' @importFrom logistf logistf
+#' @importFrom tidyr drop_na
 #'
 #' @export
 
