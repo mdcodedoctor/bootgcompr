@@ -34,8 +34,6 @@ median_boot_func <- function(data, variable, R = 1000, ...) {
   # run the bootstrap
   boot_results <- boot::boot(data = x, statistic = stat_median, R = R)
 
-  boot_results <- boot::boot(data = x, statistic = stat_median, R = R)
-
   # extract 95% CI (BCa preferred, fallback to percentile)
 
   ci <- tryCatch({
