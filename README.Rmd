@@ -101,7 +101,7 @@ trial |>
 
 ## Example of G-computation
 
-Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_stat()` function.
+Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_gcomputation()` function.
 
 
 ```{r G-computation example, include = TRUE}
@@ -117,12 +117,7 @@ trial |>
   add_overall() |>
   add_ci(
     pattern = "{stat} ({ci})") |>
-  # conducting G-computation using add_stat() function.
-  add_stat(
-    fns = everything() ~ gcomp_boot(adj.vars = c("stage", "age", "marker"), R = 1000)
-  ) |> 
-  # apply the wrapper for table formatting
-  gcomp_tbl()
+  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000)
 ```
 
 
