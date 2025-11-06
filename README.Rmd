@@ -13,7 +13,8 @@ knitr::opts_chunk$set(
   warning = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
-  out.width = "100%"
+  out.width = "100%",
+  cache = FALSE
 )
 ```
 
@@ -54,10 +55,12 @@ the following in direct combination with `gtsummary`:
     covariates were used in the model.
     
     
-** NOTE: The package is currently under development and many functions might not work as expected and may have errors. Please submit an issue to the github repo, and I will address the issue if I can and when I have time. The package is developed alongside current work obligations, and I probably cannot provide a sufficient ETA.
-I am also open for any requests and suggestions for the package, and will try to implement any changes that could be relevant.
+## NOTE
+The package is currently under development and many functions might not work as expected and may have errors. Please submit an issue to the github repo, and I will address the issue if I can and when I have time.
 
-I am not a biostatistician nor a software engineer, so using the package will be by your own responsibility. Please evaluate the source code to ensure what type of statistical test is actually applied to any analyses you conduct.**
+The package is developed alongside current work obligations, and I probably cannot provide a sufficient ETA. I am also open for any requests and suggestions for the package, and will try to implement any changes that could be relevant.
+
+I am not a biostatistician nor a software engineer, so using the package will be by your own responsibility. Please evaluate the source code to ensure what type of statistical test is actually applied to any analyses you conduct.
 
 ## Installation
 

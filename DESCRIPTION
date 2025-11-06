@@ -20,7 +20,11 @@ Imports:
     tibble,
     tidyr,
     utils,
-    logistf
+    logistf,
+    lmtest,
+    purrr,
+    quantreg,
+    sandwich
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
 Suggests: 
