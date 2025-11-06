@@ -60,6 +60,28 @@ median_diff_boot_func <- function(data, variable, by, adj.vars = NULL,
   ci_low <- est - 1.96 * se
   ci_high <- est + 1.96 * se
 
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
+  # call the used method to text format
+  method_text <- paste0(
+    "Median difference estimated via bootstrapped quantile regression with ",
+    format(R, big.mark = ","),
+    " resamples. ",
+    adj_text,
+    sep = ""
+  )
+
   # Return tidy tibble
   tibble::tibble(
     estimate  = est,
@@ -67,6 +89,6 @@ median_diff_boot_func <- function(data, variable, by, adj.vars = NULL,
     conf.low  = ci_low,
     conf.high = ci_high,
     p.value   = pval,
-    method    = "Quantile regression (median) with bootstrapped CI"
+    method    = method_text
   )
 }

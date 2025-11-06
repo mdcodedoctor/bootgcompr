@@ -70,11 +70,33 @@ rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
   pval <- 2 * min(mean(rr_boot <= 1), mean(rr_boot >= 1))
   pval <- ifelse(is.numeric(pval) && length(pval) == 1 && !is.na(pval), pval, NA_real_)
 
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
+  # create method text
+  method_text <- paste(
+    "Relative Risk estimated by non-parametric bootstrapped logistic regression with ",
+    format(R, big.mark = ","),
+    " resamples. ",
+    adj_text,
+    sep = ""
+  )
+
   tibble::tibble(
     estimate = rr_point,
     conf.low = ci[1],
     conf.high = ci[2],
     p.value = pval,
-    method = "Relative Risk estimated by non-parametric bootstrapped logistic regression"
+    method = method_text
   )
 }

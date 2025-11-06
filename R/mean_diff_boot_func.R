@@ -103,11 +103,28 @@ mean_diff_boot_func <- function(data, variable, by, adj.vars = NULL,
     basic = "Basic"
   )
 
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
   # call the used method to text format
   method_text <- paste0(
     "Mean difference estimated via bootstrapped linear regression (",
     ci_type_display[[ci_type]],
-    " 95%CI)"
+    " 95%CI) with ",
+    format(R, big.mark = ","),
+    " resamples. ",
+    adj_text,
+    sep = ""
   )
 
   # return results

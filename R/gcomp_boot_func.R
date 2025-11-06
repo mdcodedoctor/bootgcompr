@@ -88,13 +88,27 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) 
     poisson = "poisson regression"
   )
 
-  # Example usage in your function:
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
+  # create the method text with formatted R and adj.vars
   method_text <- paste(
     "Absolute Risk Difference estimated via bootstrapped G-Computation using ",
     method_display[[method]],
     " with ",
     format(R, big.mark = ","),
-    " resamples ",
+    " resamples. ",
+    adj_text,
     sep = ""
   )
 
