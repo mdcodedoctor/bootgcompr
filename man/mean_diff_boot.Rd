@@ -10,6 +10,9 @@ mean_diff_boot(adj.vars = NULL, R = 1000, ci_type = "bca")
 \item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}}
 
 \item{R}{number of bootstrap resamples}
+
+\item{ci_type}{Defines what type of CI calculation is used.
+Options: \code{"bca"}, \code{"perc"}, \code{"norm"}, \code{"basic"}. Default = \code{"bca"}.}
 }
 \description{
 Bootstrapping mean difference using linear regression and non-parametric bootstrapping with covariate adjustment

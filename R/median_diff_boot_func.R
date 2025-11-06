@@ -8,8 +8,6 @@
 #' @param by Passed stratification/grouping variable from `tbl_summary(by = )` argument.
 #' @param adj.vars Covariates used for adjusting the estimates. Uses the same setup as `gtsummary` `add_difference()` with `adj.vars = c("var")`
 #' @param R Number of resamples (Standard is 1000)
-#' @param ci_type Character string specifying the bootstrap CI type to use.
-#'   Options: `"bca"`, `"perc"`, `"norm"`, `"basic"`. Default = `"bca"`.
 #' @param ... Placeholder accepting further inputs from `tbl_summary()`
 #'
 #' @importFrom tidyr drop_na
@@ -17,6 +15,7 @@
 #' @importFrom rlang .data sym
 #' @importFrom quantreg rq
 #' @importFrom purrr pluck
+#' @importFrom stats median
 #'
 #' @export
 

@@ -25,7 +25,7 @@ test_that("gcomp_tbl modifies the gtsummary object as expected", {
 
   # Check if the method column contains the expected text
   tbl_df <- as.data.frame(result$table_body)
-  expect_true(any(grepl("Absolute Risk Difference estimated by bootstrapped G-Computation", tbl_df$method)))
+  expect_true(any(grepl("Absolute Risk Difference estimated via bootstrapped G-Computation using standard logistic regression with 10 resamples. All analyses are adjusted for stage.", tbl_df$method)))
 
   # Check if the estimate and p.value columns exist
   expect_true(all(c("estimate", "p.value") %in% colnames(tbl_df)))
