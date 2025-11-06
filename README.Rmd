@@ -101,7 +101,7 @@ trial |>
 Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_stat()` function.
 
 
-```{r tbl_summary example, include = TRUE}
+```{r G-computation example, include = TRUE}
 # create table for estimation of causal inference through G-computation
 trial |>
   tbl_summary(
