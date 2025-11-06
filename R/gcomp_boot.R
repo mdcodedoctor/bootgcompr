@@ -1,6 +1,7 @@
 #' Bootstrapping absolute risk differences using G-computation with covariate adjustment
 #' @param R number of bootstrap resamples
 #' @param adj.vars Covariates used for adjusting the estimates. Uses the same setup as `gtsummary` `add_difference()` with `adj.vars = c("var")`.
+#' @param method Sets type of method argument used, choose between `"glm"`, `"logistf"`, `"log_binomial"` or `"poisson"`.
 #'
 #' @export
 

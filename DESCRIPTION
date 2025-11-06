@@ -10,8 +10,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
     boot,
-    broom,
-    cardx,
     data.table,
     dplyr,
     gtsummary,
@@ -20,7 +18,12 @@ Imports:
     tibble,
     tidyr,
     utils,
-    logistf
+    logistf,
+    lmtest,
+    purrr,
+    quantreg,
+    sandwich,
+    glue
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
 Suggests: 

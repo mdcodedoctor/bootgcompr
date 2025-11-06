@@ -18,9 +18,6 @@ median_diff_boot_func(data, variable, by, adj.vars = NULL, R = 1000, ...)
 \item{R}{Number of resamples (Standard is 1000)}
 
 \item{...}{Placeholder accepting further inputs from \code{tbl_summary()}}
-
-\item{ci_type}{Character string specifying the bootstrap CI type to use.
-Options: \code{"bca"}, \code{"perc"}, \code{"norm"}, \code{"basic"}. Default = \code{"bca"}.}
 }
 \description{
 A short description...
