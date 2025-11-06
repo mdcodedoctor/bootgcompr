@@ -8,10 +8,8 @@
 #' @param estimate_header Header name for the calculated estimate.
 #' @param p_value_header Header name for the calculated p.value
 #'
-#' @import gtsummary
-#' @import cardx
-#' @import broom
-#' @import tidyr
+#' @importFrom gtsummary modify_column_hide modify_column_merge modify_header modify_footnote_header
+#'
 #' @export
 #' @examples
 #' # load librarires
@@ -38,13 +36,16 @@
 # Easy wrapper function for modify_column_merge and modify_header
 gcomp_tbl <- function(tbl_summary_obj,
                       pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
-                      estimate_header = "**ARDifference** (95%CI)",
+                      estimate_header = "**Risk difference** (**95%CI**)",
                       p_value_header = "**P-value**") {
+
+  method_value <- tbl_summary_obj$table_body$method[1]
+
   tbl_summary_obj |>
     gtsummary::modify_column_hide(columns = c("std.error", "method")) |>
     gtsummary::modify_column_merge(pattern = pattern) |>
     gtsummary::modify_header(estimate = estimate_header, p.value = p_value_header) |>
     gtsummary::modify_footnote_header(
-      "Absolute Risk Difference estimated by bootstrapped G-Computation",
-      columns = c(p.value))
+      method_value,
+      columns = c(estimate, p.value))
 }

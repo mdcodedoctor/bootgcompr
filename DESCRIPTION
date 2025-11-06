@@ -19,7 +19,8 @@ Imports:
     stats,
     tibble,
     tidyr,
-    utils
+    utils,
+    logistf
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
 Suggests: 

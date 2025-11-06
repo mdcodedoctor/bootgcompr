@@ -12,6 +12,9 @@
 #'
 #' @import dplyr
 #' @import tidyr
+#' @import sandwich
+#' @import lmtest
+#' @import logistf
 #' @importFrom stats as.formula
 #' @importFrom stats binomial
 #' @importFrom stats glm
@@ -22,9 +25,11 @@
 #' @export
 
 rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
+
   # Prepare data
   vars <- c(variable, by, adj.vars)
   data <- tidyr::drop_na(data, all_of(vars))
+
   data[[by]] <- factor(data[[by]], levels = unique(data[[by]]))
   data[[variable]] <- as.integer(data[[variable]])
 
@@ -32,28 +37,31 @@ rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
   model <- glm(formula, data = data, family = binomial)
 
   # Predicted risks per group
+
   risks <- data %>%
-    dplyr::mutate(pred = predict(model, type = "response")) %>%
-    dplyr::group_by(.data[[by]]) %>%
-    dplyr::summarise(risk = mean(pred), .groups = "drop") %>%
-    dplyr::pull(risk)
+    mutate(pred = predict(model, type = "response")) %>%
+    group_by(.data[[by]]) %>%
+    summarise(risk = mean(pred), .groups = "drop") %>%
+    pull(risk)
 
   rr_point <- risks[1] / risks[2]
 
   # Bootstrap log RR for CI
+
   boot_log_rr <- replicate(R, {
     idx <- sample(seq_len(nrow(data)), replace = TRUE)
     d_boot <- data[idx, ]
     m_boot <- glm(formula, data = d_boot, family = binomial)
     risks_boot <- d_boot %>%
-      dplyr::mutate(pred = predict(m_boot, newdata = d_boot, type = "response")) %>%
-      dplyr::group_by(.data[[by]]) %>%
-      dplyr::summarise(risk = mean(pred), .groups = "drop") %>%
-      dplyr::pull(risk)
+      mutate(pred = predict(m_boot, newdata = d_boot, type = "response")) %>%
+      group_by(.data[[by]]) %>%
+      summarise(risk = mean(pred), .groups = "drop") %>%
+      pull(risk)
     log(risks_boot[1] / risks_boot[2])
   })
 
   rr_boot <- exp(boot_log_rr)
+
   # Optional stability patch
   rr_boot_clean <- rr_boot[is.finite(rr_boot) & rr_boot < quantile(rr_boot, 0.99)]
   ci <- quantile(rr_boot_clean, c(0.025, 0.975), na.rm = TRUE)
@@ -62,11 +70,33 @@ rr_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
   pval <- 2 * min(mean(rr_boot <= 1), mean(rr_boot >= 1))
   pval <- ifelse(is.numeric(pval) && length(pval) == 1 && !is.na(pval), pval, NA_real_)
 
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
+  # create method text
+  method_text <- paste(
+    "Relative Risk estimated by non-parametric bootstrapped logistic regression with ",
+    format(R, big.mark = ","),
+    " resamples. ",
+    adj_text,
+    sep = ""
+  )
+
   tibble::tibble(
     estimate = rr_point,
     conf.low = ci[1],
     conf.high = ci[2],
     p.value = pval,
-    method = "Relative Risk estimated by non-parametric bootstrapped logistic regression"
+    method = method_text
   )
 }

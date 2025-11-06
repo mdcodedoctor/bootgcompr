@@ -12,6 +12,7 @@
 #'
 #' @import dplyr
 #' @import tidyr
+#' @import logistf
 #' @importFrom stats as.formula
 #' @importFrom stats binomial
 #' @importFrom stats glm
@@ -22,8 +23,9 @@
 #' @importFrom data.table :=
 #'
 #' @export
+#'
+#'
 
-# g-computation for gtsummary tbl_custom_summary
 gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) {
   # Clean data
   vars <- c(variable, by, adj.vars)
@@ -33,37 +35,90 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) 
       !!sym(by) := factor(.data[[by]], levels = unique(.data[[by]])),
       !!sym(variable) := as.integer(.data[[variable]])
     )
+
   # Build formula
   formula_str <- paste(variable, "~", paste(c(by, adj.vars), collapse = " + "))
   formula <- as.formula(formula_str)
-  # Fit model
-  model <- glm(formula, data = data, family = binomial)
+
+  # Try models in order of preference
+  methods <- c("glm", "logistf", "log_binomial", "poisson")
+  model <- NULL
+  for (method in methods) {
+    model <- try_fit_model(formula, data, method)
+    if (!is.null(model)) break
+  }
+
+  if (is.null(model)) stop("All model fitting attempts failed.")
+
   # Counterfactual datasets
   data1 <- data; data1[[by]] <- levels(data[[by]])[2]
   data0 <- data; data0[[by]] <- levels(data[[by]])[1]
   pred1 <- predict(model, newdata = data1, type = "response")
   pred0 <- predict(model, newdata = data0, type = "response")
   rd_point <- (mean(pred1) - mean(pred0)) * 100 # Convert to percentage
-  # Bootstrap
+
+  # Bootstrap with the same fallback logic
   boot_rd <- replicate(R, {
     idx <- sample(seq_len(nrow(data)), replace = TRUE)
     d <- data[idx, ]
-    m <- glm(formula, data = d, family = binomial)
+    m <- NULL
+    for (method in methods) {
+      m <- try_fit_model(formula, d, method)
+      if (!is.null(m)) break
+    }
+    if (is.null(m)) return(NA)
     d1 <- data1[idx, ]
     d0 <- data0[idx, ]
     p1 <- predict(m, newdata = d1, type = "response")
     p0 <- predict(m, newdata = d0, type = "response")
     (mean(p1) - mean(p0)) * 100 # Convert to percentage
-  })
+  }, simplify = TRUE)
+
+  # Remove NA values from bootstrap results (if any model failed)
+  boot_rd <- boot_rd[!is.na(boot_rd)]
+
   ci <- quantile(boot_rd, probs = c(0.025, 0.975))
   pval <- 2 * min(mean(boot_rd <= 0), mean(boot_rd >= 0))
-  # Return tibble in required format
+
+  # call the used method to text format
+  method_display <- list(
+    glm = "standard logistic regression",
+    logistf = "Firth's penalized regression",
+    log_binomial = "log-binomial regression",
+    poisson = "poisson regression"
+  )
+
+  # format adj.vars for the method text
+  if (is.null(adj.vars) || length(adj.vars) == 0) {
+    adj_text <- "Analyses are unadjusted."
+  } else {
+    # sort adj.vars alphabetically
+    adj_vars_sorted <- sort(adj.vars)
+    # format the list of adj.vars
+    adj_vars_formatted <- toString(adj_vars_sorted)
+    # replace the last comma with " and " for better readability
+    adj_vars_formatted <- sub(", ([^,]+)$", " and \\1", adj_vars_formatted)
+    adj_text <- paste0("All analyses are adjusted for ", adj_vars_formatted, ".")
+  }
+
+  # create the method text with formatted R and adj.vars
+  method_text <- paste(
+    "Absolute Risk Difference estimated via bootstrapped G-Computation using ",
+    method_display[[method]],
+    " with ",
+    format(R, big.mark = ","),
+    " resamples. ",
+    adj_text,
+    sep = ""
+  )
+
+  # Return tibble
   dplyr::tibble(
     estimate = rd_point,
     std.error = sd(boot_rd),
     conf.low = ci[1],
     conf.high = ci[2],
     p.value = pval,
-    method = "Absolute Risk Difference estimated by bootstrapped G-Computation"
+    method = method_text
   )
 }

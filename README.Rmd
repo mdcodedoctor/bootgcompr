@@ -10,6 +10,7 @@ editor_options:
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
+  warning = FALSE,
   comment = "#>",
   fig.path = "man/figures/README-",
   out.width = "100%"
@@ -29,27 +30,34 @@ the following in direct combination with `gtsummary`:
 
 **Currently implemented:**
 
--   Mean summary statistics through `tbl_custom_summary()`
+-   Mean and median summary statistics through `tbl_custom_summary()`
+    and the `stat_fns =` argument
 
 -   Risk Ratio / Relative Risk (RR) by bootstrapped logistic regression
     directly in `tbl_summary()` using the `add_stat()` function
 
 -   Absolute Risk Reduction / Absolute Risk Difference (ARR/ARD) using
     G-computation directly in `tbl_summary()` using the `add_stat()`
-    function
+    function.
 
--   Associated 95% confidence intervals (95%CI) for all of the above
-    mentioned statistics and analyses
+-   Mean difference by bootstrapped linear regression or median
+    difference using bootstrapped quantile regression directly through
+    `tbl_summary()` using the `add_stat()` function.
 
-**Under development or yet to be implemented:**
+-   Associated bootstrapped 95% confidence intervals (95%CI) and
+    p-values for all of the above mentioned statistics and analyses
 
--   Median summary statistics through `tbl_custom_summary()`
+-   Wrapper functions for easily formatting of tables including standard
+    displaying of the underlying statistical method, including number of
+    resamples used in each analysis and if the analyses were adjusted
+    for covariates or not, including alphabetically displayed of which
+    covariates were used in the model.
+    
+    
+** NOTE: The package is currently under development and many functions might not work as expected and may have errors. Please submit an issue to the github repo, and I will address the issue if I can and when I have time. The package is developed alongside current work obligations, and I probably cannot provide a sufficient ETA.
+I am also open for any requests and suggestions for the package, and will try to implement any changes that could be relevant.
 
--   Mean difference (MD) by bootstrapped linear regression (both
-    univariate and multivariate) directly in `tbl_summary()`
-
--   Associated 95% confidence intervals (95%CI) for all of the above
-    mentioned statistics and analyses
+I am not a biostatistician nor a software engineer, so using the package will be by your own responsibility. Please evaluate the source code to ensure what type of statistical test is actually applied to any analyses you conduct.**
 
 ## Installation
 
@@ -69,10 +77,6 @@ outputted means (using the `mean_boot()` function) or medians (using the
 functions can be used with `tbl_custom_summary()` through the
 `stat_fns =` argument.
 
-The function is called and specifies the number of applied resamples
-through the `R =` argument. If the number of resamples are not specified
-it uses the default number of 1000 resamples.
-
 ```{r tbl_summary example, include = TRUE}
 # load libraries
 library(bootgcompr)
@@ -88,9 +92,36 @@ trial |>
     missing = "no",
     type = everything() ~ "continuous"
     ) |> 
-    add_overall() |> 
-    as_gt() # note: `as_gt()` is called due to rendering issues in this document. This call is not necessary when using this                package.
+    add_overall()
 ```
+
+
+## Example of G-computation
+
+Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_stat()` function.
+
+
+```{r tbl_summary example, include = TRUE}
+# create table for estimation of causal inference through G-computation
+trial |>
+  tbl_summary(
+    include = c(death),
+    by = trt,
+    statistic = everything() ~ "{p}%",
+    missing = "no",
+    type = everything() ~ "dichotomous",
+  ) |>
+  add_overall() |>
+  add_ci(
+    pattern = "{stat} ({ci})") |>
+  # conducting G-computation using add_stat() function.
+  add_stat(
+    fns = everything() ~ gcomp_boot(adj.vars = c("stage", "age", "marker"), R = 1000)
+  ) |> 
+  # apply the wrapper for table formatting
+  gcomp_tbl()
+```
+
 
 ## Acknowledgements
 
@@ -98,6 +129,8 @@ A huge kudos to the developers of `gtsummary`. Without their substantial
 work, this package would not have existed.
 
 ## References
+
+**NOTE: References are not fully updated, but will be addressed when possible for all relevant packages and relevant publications**
 
 Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible
 summary tables with the gtsummary package. The R Journal 2021;13:570–80.
