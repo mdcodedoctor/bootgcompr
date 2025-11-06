@@ -94,6 +94,22 @@ mean_diff_boot_func <- function(data, variable, by, adj.vars = NULL,
   pval <- 2 * min(mean(boot_results$t <= 0, na.rm = TRUE),
                   mean(boot_results$t >= 0, na.rm = TRUE))
 
+
+  # create setup for displaying used 95%CI type
+  ci_type_display <- list(
+    bca = "BCa",
+    perc = "Percentile",
+    norm = "Normal",
+    basic = "Basic"
+  )
+
+  # call the used method to text format
+  method_text <- paste0(
+    "Mean difference estimated via bootstrapped linear regression (",
+    ci_type_display[[ci_type]],
+    " 95%CI)"
+  )
+
   # return results
   tibble::tibble(
     estimate = estimate,
@@ -101,10 +117,7 @@ mean_diff_boot_func <- function(data, variable, by, adj.vars = NULL,
     conf.low = ci[1],
     conf.high = ci[2],
     p.value = pval,
-    method = paste0(
-      "Mean difference estimated via bootstrapped linear regression (",
-      ci_type, " CI)"
+    method = method_text
     )
-  )
 }
 

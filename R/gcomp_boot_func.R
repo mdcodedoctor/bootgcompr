@@ -80,6 +80,24 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) 
   ci <- quantile(boot_rd, probs = c(0.025, 0.975))
   pval <- 2 * min(mean(boot_rd <= 0), mean(boot_rd >= 0))
 
+  # call the used method to text format
+  method_display <- list(
+    glm = "standard logistic regression",
+    logistf = "Firth's penalized regression",
+    log_binomial = "log-binomial regression",
+    poisson = "poisson regression"
+  )
+
+  # Example usage in your function:
+  method_text <- paste(
+    "Absolute Risk Difference estimated via bootstrapped G-Computation using ",
+    method_display[[method]],
+    " with ",
+    format(R, big.mark = ","),
+    " resamples ",
+    sep = ""
+  )
+
   # Return tibble
   dplyr::tibble(
     estimate = rd_point,
@@ -87,10 +105,6 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 1000, ...) 
     conf.low = ci[1],
     conf.high = ci[2],
     p.value = pval,
-    method = paste("Absolute Risk Difference estimated by bootstrapped G-Computation (",
-                   ifelse(method == "glm", "standard logistic",
-                          ifelse(method == "logistf", "Firth's",
-                                 ifelse(method == "log_binomial", "log-binomial", "Poisson"))),
-                   ")", sep = "")
+    method = method_text
   )
 }

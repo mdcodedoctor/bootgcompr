@@ -4,7 +4,7 @@
 \alias{rr_boot_func}
 \title{Relative risk / Risk ratio estimation using non-parametric bootstrapped logistic regression with covariate adjustment}
 \usage{
-rr_boot_func(data, variable, by, adj.vars = NULL, R = 1000, method = NULL, ...)
+rr_boot_func(data, variable, by, adj.vars = NULL, R = 1000, ...)
 }
 \arguments{
 \item{data}{A dataframe passed from \code{rr_boot()} and \code{tbl_summary()}}

@@ -8,7 +8,8 @@
 #' @param estimate_header Header name for the calculated estimate.
 #' @param p_value_header Header name for the calculated p.value
 #'
-#' @importFrom gtsummary modify_column_hide modify_column_merge modify_header modify_footnote_header
+#' @import tidyr
+#' @import gtsummary
 #'
 #' @export
 #' @examples
@@ -35,8 +36,8 @@
 # Easy wrapper function for modify_column_merge and modify_header
 rr_tbl <- function(tbl_summary_obj,
                     pattern = "{estimate} ({conf.low}, {conf.high})",
-                    estimate_header = "RR (95%CI)",
-                    p_value_header = "P-value") {
+                    estimate_header = "**RR** (**95%CI**)",
+                    p_value_header = "**P-value**") {
   tbl_summary_obj |>
     gtsummary::modify_column_hide(columns = c("method")) |>
     gtsummary::modify_column_merge(pattern = pattern) |>

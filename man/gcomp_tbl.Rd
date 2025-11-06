@@ -7,7 +7,7 @@
 gcomp_tbl(
   tbl_summary_obj,
   pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
-  estimate_header = "**ARDifference** (95\%CI)",
+  estimate_header = "**Risk difference** (**95\%CI**)",
   p_value_header = "**P-value**"
 )
 }
