@@ -15,7 +15,7 @@ test_that("gcomp_tbl modifies the gtsummary object as expected", {
     ) %>%
     add_overall() %>%
     add_ci(pattern = "{stat} ({ci})") %>%
-    add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10))
+    add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 100, ci_type = "bca", percentage = TRUE))
 
   expect_silent(
     result <- gcomp_tbl(base_table)
@@ -25,7 +25,7 @@ test_that("gcomp_tbl modifies the gtsummary object as expected", {
 
   # Check if the method column contains the expected text
   tbl_df <- as.data.frame(result$table_body)
-  expect_true(any(grepl("Absolute Risk Difference estimated via bootstrapped G-Computation using standard logistic regression with 10 resamples. All analyses are adjusted for stage.", tbl_df$method)))
+  expect_true(any(grepl("Risk Difference estimated via bootstrapped G-Computation using standard logistic regression (BCa 95%CI) with 100 resamples. Analyses adjusted for stage.", tbl_df$method)))
 
   # Check if the estimate and p.value columns exist
   expect_true(all(c("estimate", "p.value") %in% colnames(tbl_df)))

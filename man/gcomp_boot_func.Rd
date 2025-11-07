@@ -4,7 +4,15 @@
 \alias{gcomp_boot_func}
 \title{G-computation using bootstrapping with covariate adjustment}
 \usage{
-gcomp_boot_func(data, variable, by, adj.vars = NULL, R = 1000, ...)
+gcomp_boot_func(
+  data,
+  variable,
+  by,
+  adj.vars = NULL,
+  R = 2000,
+  ci_type = NULL,
+  ...
+)
 }
 \arguments{
 \item{data}{A dataframe passed from \code{gcomp_boot()} and \code{tbl_summary()}}
@@ -16,6 +24,8 @@ gcomp_boot_func(data, variable, by, adj.vars = NULL, R = 1000, ...)
 \item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}}
 
 \item{R}{number of bootstrap resamples}
+
+\item{ci_type}{Chosen type of CI calculation. Choose between \code{"bca"}, \code{"perc"}, \code{"norm"} or \code{"basic"}.}
 
 \item{...}{Placeholder accepting further inputs from \code{tbl_summary()}}
 }

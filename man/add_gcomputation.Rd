@@ -8,7 +8,8 @@ add_gcomputation(
   tbl_summary_obj,
   adj.vars = NULL,
   R = 1000,
-  method = NULL,
+  ci_type = "bca",
+  percentage = FALSE,
   pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
   estimate_header = "**Risk difference** (**95\%CI**)",
   p_value_header = "**P-value**"
@@ -21,9 +22,11 @@ add_gcomputation(
 
 \item{R}{The number of bootstrap resamples. Default = 1000.}
 
-\item{method}{A string specifying the method for computation. Usages are either "glm", "log_binomial", "poisson" or "logistf". Default = "glm"}
+\item{ci_type}{Chosen type of CI calculation. Choose between \code{"bca"}, \code{"perc"}, \code{"norm"} or \code{"basic"}.}
 
-\item{pattern}{A string specifying how to format the estimate and confidence interval.}
+\item{percentage}{Defines whether to convert estimates and CI to percentage or not.}
+
+\item{pattern}{A string specifying how to format the estimate and confidence interval. Is handled through the \verb{percentage = } argument.}
 
 \item{estimate_header}{A string specifying the header for the estimate column.}
 
@@ -53,6 +56,6 @@ trial \%>\%
   ) \%>\%
   add_ci(pattern = "{stat} ({ci})") \%>\%
   add_overall() \%>\%
-  add_gcomputation(adj.vars = c("stage"), R = 1000, method = "glm")
+  add_gcomputation(adj.vars = c("stage"), R = 100, ci_type = "bca", percentage = TRUE)
 
 }

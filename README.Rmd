@@ -80,13 +80,13 @@ outputted means (using the `mean_boot()` function) or medians (using the
 functions can be used with `tbl_custom_summary()` through the
 `stat_fns =` argument.
 
-```{r tbl_summary example, include = TRUE}
+```{r table_summary, include = TRUE}
 # load libraries
 library(bootgcompr)
 library(gtsummary)
 
 # create table for bootstrapped mean summary statistics
-trial |> 
+table_summary <- trial |> 
   tbl_custom_summary(
     include = c(ttdeath, marker),
     by = trt,
@@ -98,15 +98,28 @@ trial |>
     add_overall()
 ```
 
+```{r table_summary_print, include = FALSE}
+# manually save the table to better output
+table_summary_gt <- table_summary |> 
+  gtsummary::as_gt()
+
+gt::gtsave(table_summary_gt, filename = "man/figures/table_summary_gt.png")
+```
+
+```{r out.width = "50%", echo = FALSE}
+knitr::include_graphics("man/figures/README-table_summary_gt.png")
+```
+
+
 
 ## Example of G-computation
 
 Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_gcomputation()` function.
 
 
-```{r G-computation example, include = TRUE}
+```{r table_gcomputation, include = TRUE}
 # create table for estimation of causal inference through G-computation
-trial |>
+table_gcomputation <- trial |>
   tbl_summary(
     include = c(death),
     by = trt,
@@ -117,14 +130,22 @@ trial |>
   add_overall() |>
   add_ci(
     pattern = "{stat} ({ci})") |>
-  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000)
+  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000, ci_type = "bca", percentage = TRUE)
 ```
 
 
+```{r table_gcomputation_print, include = FALSE}
+# manually save the table to better output
+gt::gtsave(as_gt(table_gcomputation), file = "man/figures/README-table_gcomputation.png")
+```
+
+```{r out.width = "75%", echo = FALSE}
+knitr::include_graphics("man/figures/README-table_gcomputation.png")
+```
+
 ## Acknowledgements
 
-A huge kudos to the developers of `gtsummary`. Without their substantial
-work, this package would not have existed.
+A huge kudos to the developers of all the packages used as dependencies in this package. Without the work they have completed, this package would not have existed. 
 
 ## References
 
