@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bootgcompr
+# bootgcompr 0.1.0 (UNDER DEVELOPMENT)
 
 <!-- badges: start -->
 
@@ -77,7 +77,7 @@ library(bootgcompr)
 library(gtsummary)
 
 # create table for bootstrapped mean summary statistics
-trial |> 
+table_summary <- trial |> 
   tbl_custom_summary(
     include = c(ttdeath, marker),
     by = trt,
@@ -89,37 +89,15 @@ trial |>
     add_overall()
 ```
 
-<div id="dsbnrxxupq" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+``` r
 
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class='gt_from_md'><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_0"><span class='gt_from_md'><strong>Overall</strong><br />
-N = 200</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1"><span class='gt_from_md'><strong>Drug A</strong><br />
-N = 98</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_2"><span class='gt_from_md'><strong>Drug B</strong><br />
-N = 102</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">Months to Death/Censor</td>
-<td headers="stat_0" class="gt_row gt_center">19.6 (18.9, 20.3)</td>
-<td headers="stat_1" class="gt_row gt_center">20.2 (19.2, 21.2)</td>
-<td headers="stat_2" class="gt_row gt_center">19.0 (18.0, 20.1)</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Marker Level (ng/mL)</td>
-<td headers="stat_0" class="gt_row gt_center">0.91 (0.80, 1.04)</td>
-<td headers="stat_1" class="gt_row gt_center">1.02 (0.85, 1.22)</td>
-<td headers="stat_2" class="gt_row gt_center">0.82 (0.67, 1.00)</td></tr>
-  </tbody>
-  <tfoot>
-    <tr class="gt_footnotes">
-      <td class="gt_footnote" colspan="4"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class='gt_from_md'>Mean (conf.low, conf.high)</span></td>
-    </tr>
-  </tfoot>
-</table>
-</div>
+# note: Neccessary to use as_flex_table() for the output in the .Rmd file. Works fine elsewhere with usual gtsummary output.
+
+table_summary |> 
+  gtsummary::as_flex_table()
+```
+
+<img src="man/figures/README-table_summary_print-1.png" width="100%" />
 
 ## Example of G-computation
 
@@ -129,7 +107,7 @@ inference, with adjustment for specified covariates using
 
 ``` r
 # create table for estimation of causal inference through G-computation
-trial |>
+table_gcomputation <- trial |>
   tbl_summary(
     include = c(death),
     by = trt,
@@ -140,51 +118,24 @@ trial |>
   add_overall() |>
   add_ci(
     pattern = "{stat} ({ci})") |>
-  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000)
+  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000, ci_type = "bca", percentage = TRUE)
 ```
 
-<div id="zqjdoromjz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
+``` r
 
-<table class="gt_table" data-quarto-disable-processing="false" data-quarto-bootstrap="false">
-  <thead>
-    <tr class="gt_col_headings">
-      <th class="gt_col_heading gt_columns_bottom_border gt_left" rowspan="1" colspan="1" scope="col" id="label"><span class='gt_from_md'><strong>Characteristic</strong></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_0"><span class='gt_from_md'><strong>Overall</strong><br />
-N = 200 (<strong>95% CI</strong>)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_1"><span class='gt_from_md'><strong>Drug A</strong><br />
-N = 98 (<strong>95% CI</strong>)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="stat_2"><span class='gt_from_md'><strong>Drug B</strong><br />
-N = 102 (<strong>95% CI</strong>)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="estimate"><span class='gt_from_md'><strong>Risk difference</strong> (<strong>95%CI</strong>)</span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
-      <th class="gt_col_heading gt_columns_bottom_border gt_center" rowspan="1" colspan="1" scope="col" id="p.value"><span class='gt_from_md'><strong>P-value</strong></span><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span></th>
-    </tr>
-  </thead>
-  <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">Patient Died</td>
-<td headers="stat_0" class="gt_row gt_center">56% (49%, 63%)</td>
-<td headers="stat_1" class="gt_row gt_center">53% (43%, 63%)</td>
-<td headers="stat_2" class="gt_row gt_center">59% (49%, 68%)</td>
-<td headers="estimate" class="gt_row gt_center">7.97% (-6.88%, 22.2%)</td>
-<td headers="p.value" class="gt_row gt_center">0.3</td></tr>
-  </tbody>
-  <tfoot>
-    <tr class="gt_footnotes">
-      <td class="gt_footnote" colspan="6"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>1</sup></span> <span class='gt_from_md'>%</span></td>
-    </tr>
-    <tr class="gt_footnotes">
-      <td class="gt_footnote" colspan="6"><span class="gt_footnote_marks" style="white-space:nowrap;font-style:italic;font-weight:normal;line-height:0;"><sup>2</sup></span> <span class='gt_from_md'>Absolute Risk Difference estimated via bootstrapped G-Computation using standard logistic regression with 1,000 resamples. All analyses are adjusted for age, marker and stage.</span></td>
-    </tr>
-    <tr class="gt_sourcenotes">
-      <td class="gt_sourcenote" colspan="6"><span class='gt_from_md'>Abbreviation: CI = Confidence Interval</span></td>
-    </tr>
-  </tfoot>
-</table>
-</div>
+# note: Neccessary to use as_flex_table() for the output in the .Rmd file. Works fine elsewhere with usual gtsummary output.
+
+table_gcomputation |> 
+  gtsummary::as_flex_table()
+```
+
+<img src="man/figures/README-table_gcomputation_print-1.png" width="100%" />
 
 ## Acknowledgements
 
-A huge kudos to the developers of `gtsummary`. Without their substantial
-work, this package would not have existed.
+A huge kudos to the developers of all the packages used as dependencies
+in this package. Without the work they have completed, this package
+would not have existed.
 
 ## References
 

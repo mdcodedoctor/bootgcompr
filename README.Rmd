@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# bootgcompr
+# bootgcompr 0.1.0 (UNDER DEVELOPMENT)
 
 <!-- badges: start -->
 
@@ -98,19 +98,13 @@ table_summary <- trial |>
     add_overall()
 ```
 
-```{r table_summary_print, include = FALSE}
-# manually save the table to better output
-table_summary_gt <- table_summary |> 
-  gtsummary::as_gt()
+```{r table_summary_print, include = TRUE}
 
-gt::gtsave(table_summary_gt, filename = "man/figures/table_summary_gt.png")
+# note: Neccessary to use as_flex_table() for the output in the .Rmd file. Works fine elsewhere with usual gtsummary output.
+
+table_summary |> 
+  gtsummary::as_flex_table()
 ```
-
-```{r out.width = "50%", echo = FALSE}
-knitr::include_graphics("man/figures/README-table_summary_gt.png")
-```
-
-
 
 ## Example of G-computation
 
@@ -134,13 +128,12 @@ table_gcomputation <- trial |>
 ```
 
 
-```{r table_gcomputation_print, include = FALSE}
-# manually save the table to better output
-gt::gtsave(as_gt(table_gcomputation), file = "man/figures/README-table_gcomputation.png")
-```
+```{r table_gcomputation_print, include = TRUE}
 
-```{r out.width = "75%", echo = FALSE}
-knitr::include_graphics("man/figures/README-table_gcomputation.png")
+# note: Neccessary to use as_flex_table() for the output in the .Rmd file. Works fine elsewhere with usual gtsummary output.
+
+table_gcomputation |> 
+  gtsummary::as_flex_table()
 ```
 
 ## Acknowledgements
