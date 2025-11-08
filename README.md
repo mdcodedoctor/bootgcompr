@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# bootgcompr
+# bootgcompr 0.1.0 (UNDER DEVELOPMENT)
 
 <!-- badges: start -->
 

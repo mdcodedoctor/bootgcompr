@@ -1,6 +1,6 @@
 Package: bootgcompr
 Title: Bootstrap and G-computation functions in R
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: 
     person("Lasse Paludan", "Bentsen", , "lasse.paludan.bentsen@rsyd.dk", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6809-3141"))
 Description: Functions for bootstrapping and G-computation for easy useage with the `gtsummary` package.
