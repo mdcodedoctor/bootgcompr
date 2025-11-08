@@ -11,8 +11,9 @@
 #' @param tbl_summary_obj A `gtsummary` table object.
 #' @param adj.vars A character vector of variables to adjust for in the computation. Default = NULL.
 #' @param R The number of bootstrap resamples. Default = 1000.
-#' @param method A string specifying the method for computation. Usages are either "glm", "log_binomial", "poisson" or "logistf". Default = "glm"
-#' @param pattern A string specifying how to format the estimate and confidence interval.
+#' @param ci_type Chosen type of CI calculation. Choose between `"bca"`, `"perc"`, `"norm"` or `"basic"`.
+#' @param percentage Defines whether to convert estimates and CI to percentage or not.
+#' @param pattern A string specifying how to format the estimate and confidence interval. Is handled through the `percentage = ` argument.
 #' @param estimate_header A string specifying the header for the estimate column.
 #' @param p_value_header A string specifying the header for the p-value column.
 #'
@@ -31,24 +32,32 @@
 #'   ) %>%
 #'   add_ci(pattern = "{stat} ({ci})") %>%
 #'   add_overall() %>%
-#'   add_gcomputation(adj.vars = c("stage"), R = 1000, method = "glm")
+#'   add_gcomputation(adj.vars = c("stage"), R = 100, ci_type = "bca", percentage = TRUE)
 #'
 #' @export
+#'
+
+
 add_gcomputation <- function(tbl_summary_obj,
                              adj.vars = NULL,
                              R = 1000,
-                             method = NULL,
+                             ci_type = "bca",
+                             percentage = FALSE,
                              pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
                              estimate_header = "**Risk difference** (**95%CI**)",
                              p_value_header = "**P-value**") {
 
-  # Apply gcomp_boot() via add_stat()
+
+  # apply gcomp_boot() via add_stat()
   tbl_summary_obj <- tbl_summary_obj %>%
     gtsummary::add_stat(
-      fns = everything() ~ gcomp_boot(adj.vars = adj.vars, R = R, method = method)
+      fns = everything() ~ gcomp_boot(adj.vars = adj.vars,
+                                      R = R,
+                                      ci_type = ci_type,
+                                      percentage = percentage)
     )
 
-  # Apply gcomp_tbl() for formatting
+  # format output table
   gcomp_tbl(
     tbl_summary_obj = tbl_summary_obj,
     pattern = pattern,
@@ -56,3 +65,4 @@ add_gcomputation <- function(tbl_summary_obj,
     p_value_header = p_value_header
   )
 }
+

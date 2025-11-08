@@ -30,7 +30,7 @@
 #'  add_ci(
 #'    pattern = "{stat} ({ci})") |>
 #'  add_stat(
-#'    fns = everything() ~ rr_boot(adj.vars = c("stage"), R = 1000)) |>
+#'    fns = everything() ~ rr_boot(adj.vars = c("stage"), R = 100)) |>
 #'  rr_tbl()
 
 # Easy wrapper function for modify_column_merge and modify_header

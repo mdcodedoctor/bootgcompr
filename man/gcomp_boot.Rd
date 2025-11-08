@@ -4,14 +4,16 @@
 \alias{gcomp_boot}
 \title{Bootstrapping absolute risk differences using G-computation with covariate adjustment}
 \usage{
-gcomp_boot(adj.vars = NULL, R = 1000, method = NULL)
+gcomp_boot(adj.vars = NULL, R = 1000, ci_type = "bca", percentage = FALSE, ...)
 }
 \arguments{
 \item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}.}
 
 \item{R}{number of bootstrap resamples}
 
-\item{method}{Sets type of method argument used, choose between \code{"glm"}, \code{"logistf"}, \code{"log_binomial"} or \code{"poisson"}.}
+\item{ci_type}{Chosen type of CI calculation. Choose between \code{"bca"}, \code{"perc"}, \code{"norm"} or \code{"basic"}.}
+
+\item{percentage}{Defines whether to convert estimates and CI to percentage or not. or \code{"poisson"}.}
 }
 \description{
 Bootstrapping absolute risk differences using G-computation with covariate adjustment

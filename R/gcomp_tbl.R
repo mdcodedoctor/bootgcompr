@@ -4,11 +4,13 @@
 #' Function used in conjunction with `gtsummary` `tbl_summary()` and `bootgcompr` `gcomp_boot` function. Standard output when using `gcomp_boot` is not adjusted to the usual `tbl_summary()` output as a custom function is called. This wrapper function cleans up the outputted table and formats it as expected other types of `tbl_summary()` outputs, e.g. when using functions like `add_difference()`.
 #'
 #' @param tbl_summary_obj The used table summary object (e.g. `tbl_summary()`)
+#' @param percentage Defines whether to convert estimates and CI to percentage or not.
 #' @param pattern The pattern in which the calculated output is formatted
 #' @param estimate_header Header name for the calculated estimate.
 #' @param p_value_header Header name for the calculated p.value
 #'
 #' @importFrom gtsummary modify_column_hide modify_column_merge modify_header modify_footnote_header
+#' @importFrom rlang !! sym
 #'
 #' @export
 #' @examples
@@ -33,11 +35,16 @@
 #'  gcomp_tbl()
 
 
-# Easy wrapper function for modify_column_merge and modify_header
+# wrapper function for modify_column_merge and modify_header
 gcomp_tbl <- function(tbl_summary_obj,
-                      pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
+                      percentage = FALSE,
+                      pattern = NULL,
                       estimate_header = "**Risk difference** (**95%CI**)",
                       p_value_header = "**P-value**") {
+
+  if (is.null(pattern)) {
+    pattern <- if (percentage) "{estimate}% ({conf.low}%, {conf.high}%)" else "{estimate} ({conf.low}, {conf.high})"
+  }
 
   method_value <- tbl_summary_obj$table_body$method[1]
 
@@ -49,3 +56,4 @@ gcomp_tbl <- function(tbl_summary_obj,
       method_value,
       columns = c(estimate, p.value))
 }
+

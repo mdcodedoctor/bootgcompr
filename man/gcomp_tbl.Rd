@@ -6,13 +6,16 @@
 \usage{
 gcomp_tbl(
   tbl_summary_obj,
-  pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
+  percentage = FALSE,
+  pattern = NULL,
   estimate_header = "**Risk difference** (**95\%CI**)",
   p_value_header = "**P-value**"
 )
 }
 \arguments{
 \item{tbl_summary_obj}{The used table summary object (e.g. \code{tbl_summary()})}
+
+\item{percentage}{Defines whether to convert estimates and CI to percentage or not.}
 
 \item{pattern}{The pattern in which the calculated output is formatted}
 
