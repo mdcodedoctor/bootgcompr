@@ -12,7 +12,8 @@ add_gcomputation(
   percentage = FALSE,
   pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
   estimate_header = "**Risk difference** (**95\%CI**)",
-  p_value_header = "**P-value**"
+  p_value_header = "**P-value**",
+  ...
 )
 }
 \arguments{

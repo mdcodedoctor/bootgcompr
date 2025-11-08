@@ -21,7 +21,7 @@ test_that("gcomp_boot works with tbl_summary and add_stat", {
         pattern = "{stat} ({ci})"
       ) %>%
       add_stat(
-        fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10)
+        fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10, ci_type = "bca", percentage = FALSE)
       ) %>%
       gcomp_tbl()
   )
@@ -60,7 +60,7 @@ test_that("gcomp_boot works with different adjusted variables", {
         pattern = "{stat} ({ci})"
       ) %>%
       add_stat(
-        fns = everything() ~ gcomp_boot(adj.vars = c("grade", "age"), R = 10)
+        fns = everything() ~ gcomp_boot(adj.vars = c("grade", "age"), R = 10, ci_type = "bca", percentage = FALSE)
       ) %>%
       gcomp_tbl()
   )
@@ -99,7 +99,7 @@ test_that("gcomp_boot handles missing data", {
       ) %>%
       add_overall() %>%
       add_ci(pattern = "{stat} ({ci})") %>%
-      add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10))
+      add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10, ci_type = "bca", percentage = FALSE))
   )
   expect_s3_class(result, "gtsummary")
 })
@@ -127,7 +127,7 @@ test_that("gcomp_boot works with integer trt", {
       ) %>%
       add_overall() %>%
       add_ci(pattern = "{stat} ({ci})") %>%
-      add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10))
+      add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"), R = 10, ci_type = "bca", percentage = FALSE))
   )
   expect_s3_class(result, "gtsummary")
 })

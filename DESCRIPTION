@@ -23,8 +23,7 @@ Imports:
     purrr,
     quantreg,
     sandwich,
-    glue,
-    gt
+    glue
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
 Suggests: 
