@@ -7,7 +7,7 @@
 #' @export
 
 # wrapper function for gcomp_boot_func
-gcomp_boot <- function(adj.vars = NULL, R = 1000, ci_type = "bca", percentage = FALSE) {
+gcomp_boot <- function(adj.vars = NULL, R = 1000, ci_type = "bca", percentage = FALSE, t.effect = NULL, scale = NULL) {
   force(adj.vars); force(R); force(ci_type); force(percentage)
 
   function(data, variable, by, ...) {
@@ -18,6 +18,8 @@ gcomp_boot <- function(adj.vars = NULL, R = 1000, ci_type = "bca", percentage = 
       adj.vars = adj.vars,
       R = R,
       ci_type = ci_type,
+      t.effect = t.effect,
+      scale = scale,
       ...
     )
 

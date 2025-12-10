@@ -27,7 +27,7 @@
 #'
 #'
 
-gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_type = NULL, ...) {
+gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_type = NULL, t.effect = NULL, scale = NULL, ...) {
 
   # revise dataset to comply to correct data format
   vars <- c(variable, by, adj.vars)
@@ -79,35 +79,61 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_ty
 
   pred1 <- predict(main_model, newdata = data1, type = "response")
   pred0 <- predict(main_model, newdata = data0, type = "response")
-
-  ate_point <- mean(pred1) - mean(pred0)
+  if (scale=="difference"){
+    if (t.effect=="Average"){
+      ate_point <- mean(pred1, na.rm=TRUE) - mean(pred0, na.rm=TRUE)
+    } else if (t.effect=="Individual"){
+      ate_point <- mean(pred1-pred0, na.rm=TRUE)
+    } else{
+      stop("Specification of the treatment effect (t.effect) is missing with no default")
+    }
+  } else if (scale=="ratio"){
+    if (t.effect=="Average"){
+      ate_point <- mean(pred1, na.rm=TRUE) / mean(pred0, na.rm=TRUE)
+    } else if (t.effect=="Individual"){
+      ate_point <- mean(pred1/pred0, na.rm=TRUE)
+    } else{
+      stop("Specification of the treatment effect (t.effect) is missing with no default")
+    }
+  } else {
+    stop("Specification of the scale (scale) is missing with no default")
+  }
 
   # refit the model
   boot_stat <- function(data, indices) {
     d <- data[indices, ]
-
-    # keep treatment factor levels consistent with original dataset
     d[[by]] <- factor(d[[by]], levels = levels(data[[by]]))
 
-    # try to fit the model for each bootstrap sample
     m <- NULL
     for (meth in methods) {
       m <- try_fit_model(formula, d, meth)
       if (!is.null(m)) break
     }
-
     if (is.null(m)) return(NA_real_)
 
-    # construct counterfactuals
     d1 <- d; d1[[by]] <- levels(data[[by]])[2]
     d0 <- d; d0[[by]] <- levels(data[[by]])[1]
 
-    # predictions
     p1 <- predict(m, newdata = d1, type = "response")
     p0 <- predict(m, newdata = d0, type = "response")
 
-    mean(p1) - mean(p0)
+    if (scale == "difference") {
+      if (t.effect == "Average") {
+        return(mean(p1) - mean(p0))
+      } else if (t.effect == "Individual") {
+        return(mean(p1 - p0))
+      } else stop("Missing t.effect")
+    } else if (scale == "ratio") {
+      if (t.effect == "Average") {
+        return(mean(p1) / mean(p0))
+      } else if (t.effect == "Individual") {
+        return(mean(p1 / p0))
+      } else stop("Specification of the treatment effect (t.effect) is missing with no default")
+    } else {
+      stop("Specification of the scale (scale) is missing with no default")
+    }
   }
+
 
   # calculate bootstrap CI by defined type
   b <- boot::boot(data = data, statistic = boot_stat, R = R)
@@ -136,7 +162,9 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_ty
   std_error <- sd(boot_t)
 
   # calculate two-sided p-value
-  p_val <- 2 * min(mean(boot_t <= 0), mean(boot_t >= 0))
+  null_value <- if (scale == "difference") 0 else 1
+
+  p_val <- 2 * min(mean(boot_t <= null_value), mean(boot_t >= null_value))
 
   # define the method and analysis type used for the output text
   method_lookup <- list(
@@ -166,16 +194,26 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_ty
     adj_text <- paste0("Analyses adjusted for ", adj_vars_formatted, ".")
   }
 
-  # define what method was used
+  effect_label <- if (scale == "difference" && t.effect == "Average") {
+    "Marginal Risk Difference"
+  } else if (scale == "difference" && t.effect == "Individual") {
+    "Individual Risk Difference"
+  } else if (scale == "ratio" && t.effect == "Average") {
+    "Marginal Risk Ratio"
+  } else if (scale == "ratio" && t.effect == "Individual") {
+    "Individual Risk Ratio"
+  } else {
+    stop("Scale or treatment effect or both are not specified with no default")
+  }
+
+  ci_label <- if (!is.null(ci_type) && !is.null(ci_type_display[[ci_type]])) ci_type_display[[ci_type]] else ci_type
+
   method_text <- paste0(
-    "Risk Difference estimated via bootstrapped G-Computation using ",
+    effect_label, " estimated via bootstrapped G-Computation using ",
     method_lookup[[chosen_method]],
-    " (",
-    ci_type_display[[ci_type]],
-    " 95%CI) with ",
+    " (", ci_label, " 95%CI) with ",
     format(R, big.mark = ","), " resamples. ",
-    adj_text,
-    sep = ""
+    adj_text
   )
 
   # return tibble
@@ -185,6 +223,7 @@ gcomp_boot_func <- function(data, variable, by, adj.vars = NULL, R = 2000, ci_ty
     conf.low = ci_vals[1],
     conf.high = ci_vals[2],
     p.value = p_val,
-    method = method_text
+    method = method_text,
+    effect_label = effect_label
   ))
 }

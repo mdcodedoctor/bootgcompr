@@ -43,21 +43,22 @@ add_gcomputation <- function(tbl_summary_obj,
                              R = 1000,
                              ci_type = "bca",
                              percentage = FALSE,
-                             pattern = "{estimate}% ({conf.low}%, {conf.high}%)",
+                             t.effect = "Average",
+                             scale = "difference",
+                             pattern = NULL,
                              estimate_header = "**Risk difference** (**95%CI**)",
                              p_value_header = "**P-value**") {
 
-
-  # apply gcomp_boot() via add_stat()
   tbl_summary_obj <- tbl_summary_obj %>%
     gtsummary::add_stat(
       fns = everything() ~ gcomp_boot(adj.vars = adj.vars,
                                       R = R,
                                       ci_type = ci_type,
+                                      t.effect = t.effect,
+                                      scale = scale,
                                       percentage = percentage)
     )
 
-  # format output table
   gcomp_tbl(
     tbl_summary_obj = tbl_summary_obj,
     pattern = pattern,

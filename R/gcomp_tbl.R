@@ -39,21 +39,26 @@
 gcomp_tbl <- function(tbl_summary_obj,
                       percentage = FALSE,
                       pattern = NULL,
-                      estimate_header = "**Risk difference** (**95%CI**)",
                       p_value_header = "**P-value**") {
 
   if (is.null(pattern)) {
-    pattern <- if (percentage) "{estimate}% ({conf.low}%, {conf.high}%)" else "{estimate} ({conf.low}, {conf.high})"
+    pattern <-
+      if (percentage) "{estimate}% ({conf.low}%, {conf.high}%)"
+    else "{estimate} ({conf.low}, {conf.high})"
   }
+
+  effect_label <- tbl_summary_obj$table_body$effect_label[1]
 
   method_value <- tbl_summary_obj$table_body$method[1]
 
-  tbl_summary_obj |>
-    gtsummary::modify_column_hide(columns = c("std.error", "method")) |>
-    gtsummary::modify_column_merge(pattern = pattern) |>
-    gtsummary::modify_header(estimate = estimate_header, p.value = p_value_header) |>
+  tbl_summary_obj %>%
+    gtsummary::modify_column_hide(columns = c(std.error, method, effect_label)) %>%
+    gtsummary::modify_column_merge(pattern = pattern) %>%
+    gtsummary::modify_header(estimate = effect_label, p.value = p_value_header) %>%
     gtsummary::modify_footnote_header(
       method_value,
-      columns = c(estimate, p.value))
+      columns = c(estimate, p.value)
+    )
 }
+
 
