@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-# bootgcompr 0.1.0 (UNDER DEVELOPMENT)
+# bootgcompr 0.1.1 (UNDER DEVELOPMENT)
 
 <!-- badges: start -->
 
@@ -31,36 +31,48 @@ the following in direct combination with `gtsummary`:
 
 **Currently implemented:**
 
--   Mean and median summary statistics through `tbl_custom_summary()`
+-   Bootstrapped mean and median summary statistics through `tbl_custom_summary()`
     and the `stat_fns =` argument
 
 -   Risk Ratio / Relative Risk (RR) by bootstrapped logistic regression
-    directly in `tbl_summary()` using the `add_stat()` function
-
--   Absolute Risk Reduction / Absolute Risk Difference (ARR/ARD) using
-    G-computation directly in `tbl_summary()` using the `add_stat()`
-    function.
+    directly in `tbl_summary()` using the `add_stat()` function.
 
 -   Mean difference by bootstrapped linear regression or median
     difference using bootstrapped quantile regression directly through
     `tbl_summary()` using the `add_stat()` function.
 
--   Associated bootstrapped 95% confidence intervals (95%CI) and
-    p-values for all of the above mentioned statistics and analyses
+-   Causal inference through G-computation for calculating risk
+    difference, risk ratio, mean difference and ratio of means directly
+    with `tbl_summary()` using the `add_stat()` function.
+    Handles both binary/dichotomous and continuous outcomes, with or
+    without adjustment for covariates.
+
+-   95%CI and p-values for all of the above mentioned analyses. Standard
+    errors and specific methods for each variable can easily be
+    extracted from each table if necessary through the usual `gtsummary`
+    functions.
 
 -   Wrapper functions for easily formatting of tables including standard
     displaying of the underlying statistical method, including number of
     resamples used in each analysis and if the analyses were adjusted
     for covariates or not, including alphabetically displayed of which
     covariates were used in the model.
-    
-    
+
 ## NOTE
-The package is currently under development and many functions might not work as expected and may have errors. Please submit an issue to the github repo, and I will address the issue if I can and when I have time.
 
-The package is developed alongside current work obligations, and I probably cannot provide a sufficient ETA. I am also open for any requests and suggestions for the package, and will try to implement any changes that could be relevant.
+The package is currently under development and many functions might not
+work as expected and may have errors. Please submit an issue to the
+github repo, and I will address the issue if I can and when I have time.
 
-I am not a biostatistician nor a software engineer, so using the package will be by your own responsibility. Please evaluate the source code to ensure what type of statistical test is actually applied to any analyses you conduct.
+The package is developed alongside current work obligations, and I
+probably cannot provide a sufficient ETA. I am also open for any
+requests and suggestions for the package, and will try to implement any
+changes that could be relevant and if I have the skills for doing this. 
+
+I am not a biostatistician nor a software engineer, so using the package
+will be by your own responsibility. The package has had some parts of the code revied by a biostatistician with experience in `R`. Please evaluate the source code to
+ensure what type of statistical test is actually applied to any analyses
+you conduct if in doubt. 
 
 ## Installation
 
@@ -108,8 +120,9 @@ table_summary |>
 
 ## Example of G-computation
 
-Estimation of absolute risk difference using G-computation as causal inference, with adjustment for specified covariates using `tbl_summary()` and the `add_gcomputation()` function.
-
+Estimation of absolute risk difference using G-computation as causal
+inference, with adjustment for specified covariates using
+`tbl_summary()` and the `add_gcomputation()` function.
 
 ```{r table_gcomputation, include = TRUE}
 # create table for estimation of causal inference through G-computation
@@ -124,9 +137,14 @@ table_gcomputation <- trial |>
   add_overall() |>
   add_ci(
     pattern = "{stat} ({ci})") |>
-  add_gcomputation(adj.vars = c("stage", "age", "marker"), R = 1000, ci_type = "bca", percentage = TRUE)
+  add_gcomputation(adj.vars = c("age", "stage", "response"), 
+                   R = 1000, 
+                   ci_type = "bca", 
+                   t.effect = "average", 
+                   scale = "ratio", 
+                   percentage = TRUE, 
+                   footnotes_separate = TRUE)
 ```
-
 
 ```{r table_gcomputation_print, include = TRUE}
 
@@ -138,11 +156,12 @@ table_gcomputation |>
 
 ## Acknowledgements
 
-A huge kudos to the developers of all the packages used as dependencies in this package. Without the work they have completed, this package would not have existed. 
+A huge kudos to the developers of all the packages used as dependencies in this package. Especially to the authors of `gtsummary`, a package which allows easy creation of summary and statistical tables for publications. Without the work they have completed, this package would not have existed.
 
 ## References
 
-**NOTE: References are not fully updated, but will be addressed when possible for all relevant packages and relevant publications**
+**NOTE: References are not fully updated, but will be addressed when
+possible for all relevant packages and relevant publications**
 
 Sjoberg DD, Whiting K, Curry M, Lavery JA, Larmarange J. Reproducible
 summary tables with the gtsummary package. The R Journal 2021;13:570–80.
