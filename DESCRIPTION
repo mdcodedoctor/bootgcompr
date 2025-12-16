@@ -1,6 +1,6 @@
 Package: bootgcompr
 Title: Bootstrap and G-computation functions in R
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: 
     person("Lasse Paludan", "Bentsen", , "lasse.paludan.bentsen@rsyd.dk", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-6809-3141"))
 Description: Functions for bootstrapping and G-computation for easy useage with the `gtsummary` package.
@@ -10,7 +10,6 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.3
 Imports: 
     boot,
-    data.table,
     dplyr,
     gtsummary,
     rlang,
@@ -23,7 +22,8 @@ Imports:
     purrr,
     quantreg,
     sandwich,
-    glue
+    glue,
+    stats
 URL: https://github.com/mdcodedoctor/bootgcompr
 BugReports: https://github.com/mdcodedoctor/bootgcompr/issues
 Suggests: 

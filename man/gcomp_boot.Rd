@@ -2,19 +2,55 @@
 % Please edit documentation in R/gcomp_boot.R
 \name{gcomp_boot}
 \alias{gcomp_boot}
-\title{Bootstrapping absolute risk differences using G-computation with covariate adjustment}
+\title{Bootstrapping absolute risk differences using G-computation with covariate adjustment. Main function for best setup of the output should be called through \code{add_gcomputation()}.}
 \usage{
-gcomp_boot(adj.vars = NULL, R = 1000, ci_type = "bca", percentage = FALSE, ...)
+gcomp_boot(
+  adj.vars = NULL,
+  R = 2000,
+  ci_type = "bca",
+  t.effect = "average",
+  scale = "difference",
+  percentage = FALSE,
+  ...
+)
 }
 \arguments{
-\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}.}
+\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}. Several vars can be passed and the formulas will be taken as \code{glm()} or \code{lm()}, e.g. \code{lm(outcome ~ group + covariate1 + covariate2 + covariate3, data = data)} If adj.vars is not called, the analysis will be calculated unadjusted, e.g. \code{lm(outcome ~ group, data = data)}}
 
-\item{R}{number of bootstrap resamples}
+\item{R}{number of bootstrap resamples. Defaults to \code{R = 2000}.}
 
 \item{ci_type}{Chosen type of CI calculation. Choose between \code{"bca"}, \code{"perc"}, \code{"norm"} or \code{"basic"}.}
 
-\item{percentage}{Defines whether to convert estimates and CI to percentage or not. or \code{"poisson"}.}
+\item{t.effect}{Whether to calculate average or individual differences or ratios. Choose between \code{"average"} or \code{"individual"}.}
+
+\item{scale}{Type of scale used, set to either \code{"difference"} or \code{"ratio"}. Differences in binary outcomes are set as marginal risk differences, while continuous outcomes are set as adjusted or unadjusted mean differences. Ratios are calculated as marginal risk ratio for binary outcomes and either adjusted or unadjusted ratio of means for continuous outcomes.}
+
+\item{percentage}{Defines whether to convert estimates and CI to percentage or not, set as either \code{TRUE} or \code{FALSE} Percentage only influence binary outcomes. Defaults to \code{FALSE}.}
+
+\item{...}{Placeholder for gtsummary table objects}
+}
+\value{
+A \code{gtsummary} table object with generalized computation estimates and formatting applied.
 }
 \description{
-Bootstrapping absolute risk differences using G-computation with covariate adjustment
+Bootstrapping absolute risk differences using G-computation with covariate adjustment. Main function for best setup of the output should be called through \code{add_gcomputation()}.
+}
+\examples{
+library(gtsummary)
+
+trial \%>\%
+  tbl_summary(
+    missing = "no",
+    include = c(death),
+    by = response,
+    statistic = everything() ~ "{p}\%",
+    type = everything() ~ "dichotomous"
+  ) \%>\%
+  add_ci(pattern = "{stat} ({ci})") \%>\%
+  add_overall() \%>\%
+  add_stat(fns = everything() ~ gcomp_boot(adj.vars = c("stage"),
+                                           R = 100,
+                                           ci_type = "bca",
+                                           percentage = TRUE))
+
 }

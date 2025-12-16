@@ -5,33 +5,32 @@
 \title{Add Generalized Computation to a gtsummary Table}
 \usage{
 add_gcomputation(
-  tbl_summary_obj,
-  adj.vars = NULL,
-  R = 1000,
-  ci_type = "bca",
-  percentage = FALSE,
-  pattern = "{estimate}\% ({conf.low}\%, {conf.high}\%)",
-  estimate_header = "**Risk difference** (**95\%CI**)",
-  p_value_header = "**P-value**",
-  ...
+  tbl,
+  ...,
+  footnotes_separate = FALSE,
+  t.effect = "average",
+  scale = "difference",
+  percentage = FALSE
 )
 }
 \arguments{
-\item{tbl_summary_obj}{A \code{gtsummary} table object.}
+\item{tbl}{A \code{gtsummary} table object.}
 
-\item{adj.vars}{A character vector of variables to adjust for in the computation. Default = NULL.}
+\item{...}{Placeholder for gtsummary table objects}
 
-\item{R}{The number of bootstrap resamples. Default = 1000.}
+\item{footnotes_separate}{Defines whether footnotes for what statistical analysis was conducted should be placed as either one combined footnote or separate footnotes in a similar manner as gtsummarys \code{separate_p_footnotes()}. \code{footnotes_separate = TRUE} gives each individual test a footnote, while \code{FALSE} keeps them combined. Defaults to \code{FALSE}.}
+
+\item{t.effect}{Whether to calculate average or individual differences or ratios. Choose between \code{"average"} or \code{"individual"}.}
+
+\item{scale}{Type of scale used, set to either \code{"difference"} or \code{"ratio"}. Differences in binary outcomes are set as marginal risk differences, while continuous outcomes are set as adjusted or unadjusted mean differences. Ratios are calculated as marginal risk ratio for binary outcomes and either adjusted or unadjusted ratio of means for continuous outcomes.}
+
+\item{percentage}{Defines whether to convert estimates and CI to percentage or not, set as either \code{TRUE} or \code{FALSE} Percentage only influence binary outcomes. Defaults to \code{FALSE}.}
+
+\item{adj.vars}{Covariates used for adjusting the estimates. Uses the same setup as \code{gtsummary} \code{add_difference()} with \code{adj.vars = c("var")}. Several vars can be passed and the formulas will be taken as \code{glm()} or \code{lm()}, e.g. \code{lm(outcome ~ group + covariate1 + covariate2 + covariate3, data = data)} If adj.vars is not called, the analysis will be calculated unadjusted, e.g. \code{lm(outcome ~ group, data = data)}}
+
+\item{R}{number of bootstrap resamples. Defaults to \code{R = 2000}.}
 
 \item{ci_type}{Chosen type of CI calculation. Choose between \code{"bca"}, \code{"perc"}, \code{"norm"} or \code{"basic"}.}
-
-\item{percentage}{Defines whether to convert estimates and CI to percentage or not.}
-
-\item{pattern}{A string specifying how to format the estimate and confidence interval. Is handled through the \verb{percentage = } argument.}
-
-\item{estimate_header}{A string specifying the header for the estimate column.}
-
-\item{p_value_header}{A string specifying the header for the p-value column.}
 }
 \value{
 A \code{gtsummary} table object with generalized computation estimates and formatting applied.
@@ -57,6 +56,12 @@ trial \%>\%
   ) \%>\%
   add_ci(pattern = "{stat} ({ci})") \%>\%
   add_overall() \%>\%
-  add_gcomputation(adj.vars = c("stage"), R = 100, ci_type = "bca", percentage = TRUE)
+  add_gcomputation(adj.vars = c("age", "stage", "response"),
+                   R = 1000,
+                   ci_type = "bca",
+                   t.effect = "average",
+                   scale = "ratio",
+                   percentage = TRUE,
+                   footnotes_separate = TRUE)
 
 }
